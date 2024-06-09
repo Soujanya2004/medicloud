@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+}
+
+#preloader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure preloader stays on top */
+}
+
+#preloader .spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #007bff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#content {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#content.loaded {
+    opacity: 1;
+}
+
+
+
+.rectangle {
+    padding: 10px 20px;
+position: relative;
+overflow: hidden; /* Clip overflowing content */
+width: 200px; /* Adjust width as needed */
+height: 50px; /* Adjust height as needed */
+}
+
+.rectangle::after {
+content: "";
+position: absolute;
+bottom: 0;
+right: -100%; /* Initial position off-screen to the left (adjusted for overflow) */
+width: 100%; /* Exceeds rectangle width to ensure full coverage */
+height: 5px; /* Adjust border thickness as needed */
+background-color: rgb(71, 40, 143); 
+animation: animateBorder 1s linear infinite;
+}
+
+@keyframes animateBorder {
+from { right: 0%; } 
+to { right: 100%;
+width: 0;        
+} 
+}
+

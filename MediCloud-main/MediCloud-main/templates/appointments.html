@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Appointment and Reminder</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_app.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Doctor Appointment and Reminder</h1>
+    <div id="appointments">
+      <h2>Make an Appointment</h2>
+      <form action="{{ url_for('appointments') }}" method="post">
+        <label for="specialist">Choose a Specialist:</label>
+        <select id="specialist" name="specialist">
+            <option value="cardiologist">Cardiologist</option>
+            <option value="dermatologist">Dermatologist</option>
+            <option value="endocrinologist">Endocrinologist</option>
+            <option value="gastroenterologist">Gastroenterologist</option>
+            <option value="neurologist">Neurologist</option>
+            <option value="orthopedic surgeon">Orthopedic Surgeon</option>
+            <option value="pediatrician">Pediatrician</option>
+            <option value="psychiatrist">Psychiatrist</option>
+            <option value="urologist">Urologist</option>
+        </select>
+
+        <label for="doctor">Choose a Doctor:</label>
+        <select id="doctor" name="doctor">
+            <option value="Dr Rajesh">Dr Rajesh</option>
+            <option value="Dr Priyanka">Dr Priyanka</option>
+            <option value="Dr Arjun">Dr Arjun</option>
+            <option value="Dr Seeta">Dr Seeta</option>
+            <option value="Dr Rishab">Dr Rishab</option>
+            <option value="Dr Janavi">Dr Janavi</option>
+            <option value="Dr Pavan">Dr Pavan</option>
+        </select>
+
+        <label for="date">Select a Date:</label>
+        <input type="date" id="date" name="date">
+
+        <button id="addAppointment" type="submit">Add Appointment</button>
+      </form>
+    </div>
+    <div id="reminders">
+      <h2>Set Reminders</h2>
+      <label for="reminderDate">Reminder Date:</label>
+      <input type="date" id="reminderDate" name="reminderDate">
+      <button id="addReminder">Add Reminder</button>
+    </div>
+    <div id="reminderList">
+      <h2>Appointment List</h2>
+      {% for appointment in appointments %}
+        <p>Username: {{ appointment.username }}</p>
+        <p>Specialist: {{ appointment.specialist }}</p>
+        <p>Doctor: {{ appointment.doctor }}</p>
+        <p>Date: {{ appointment.date }}</p>
+        <hr>
+      {% endfor %}
+      <ul id="remindersUl"></ul>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/style.css') }}"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+body{
+    font-family:Arial, Helvetica, sans-serif;
+}
+.navbar-brand{
+    background-image: url("../medlo.png");
+    background-size: cover;
+    height: 55px;
+    width: 100px;
+    border-radius: 5px;
+    
+}
+.navbar-text{
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.key{
+    text-align: center;
+}
+
+.logo{
+    background: url("../medlo.png");
+    background-size: cover;
+   
+    height: 55px;
+    width: 100px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    background-image: url("../backmed.jpg");
+    background-size: cover;
+    width: 100%;
+    border-radius: 10px;
+    
+}
+p{
+    font-weight: 600;
+}

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+        <h1>Health Data</h1>
+        <ul>
+          <li><a href="#" onclick="showForm('medicalHistory')">Medical History</a></li>
+          <li><a href="#" onclick="showForm('familyHistory')">Family History</a></li>
+          <li> <a href="#" onclick="showForm('progressNotes')">Progress Notes</a></li>
+          <li><a href="#" onclick="showForm('surgeriesProcedures')">Surgeries and Procedures</a></li>
+          <li><a href="#" onclick="showForm('medicationAllergies')">Medication Allergies</a></li>
+        </ul>
+      </div>
+      
+    
+    <div  id="categoryContainer">
+        <h1>Patient Record System</h1>
+        <p>( Please select a category from the navigation menu )</p>
+    </div>
+    
+    <div class="container" id="patientDetailsContainer">
+        <h1>Patient Details</h1>
+        <form id="patientForm" onsubmit="savePatientDetails(); return false;">
+            <label for="name">Patient Name:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required><br>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required><br>
+            <button type="submit">Save Patient Details</button>
+        </form>
+    </div>
+    
+    <div class="container" id="formContainer"></div>
+    
+    <div class="container" id="patientDetailsContainer">
+        <h1>Patient Record</h1>
+        <table class="patient-details-table" id="patientDetailsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Category</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="patientDetailsBody">
+              
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        var patientDetails = [];
+    
+        function showForm(category) {
+            var formContainer = document.getElementById('formContainer');
+            formContainer.innerHTML = '';
+    
+            var form = document.createElement('form');
+            form.innerHTML = getFormFields(category);
+            form.innerHTML += '<button type="button" onclick="saveData(\'' + category + '\')">Save</button>';
+            formContainer.appendChild(form);
+        }
+    
+        function getFormFields(category) {
+            switch (category) {
+                case 'medicalHistory':
+                    return `
+                        <label for="pastIllnesses">Past Illnesses:</label>
+                        <textarea id="pastIllnesses" name="pastIllnesses" rows="2"></textarea><br>
+                        <label for="surgeries">Surgeries:</label>
+                        <textarea id="surgeries" name="surgeries" rows="2"></textarea><br>
+                        <label for="injuries">Injuries:</label>
+                        <textarea id="injuries" name="injuries" rows="2"></textarea><br>
+                        <label for="chronicConditions">Chronic Conditions:</label>
+                        <textarea id="chronicConditions" name="chronicConditions" rows="2"></textarea><br>
+                    `;
+                case 'familyHistory':
+                    return `
+                        <label for="familyHistory">Family History:</label>
+                        <textarea id="familyHistory" name="familyHistory" rows="2"></textarea><br>
+                    `;
+                case 'immunizationRecords':
+                    return `
+                        <label for="vaccinations">Vaccinations:</label>
+                        <textarea id="vaccinations" name="vaccinations" rows="3"></textarea><br>
+                    `;
+                case 'medicationAllergies':
+                    return `
+                        <label for="medicationAllergies">Medication Allergies:</label>
+                        <textarea id="medicationAllergies" name="medicationAllergies" rows="2"></textarea><br>
+                    `;
+                case 'medicationList':
+                    return `
+                        <label for="medicationList">Medication List:</label>
+                        <textarea id="medicationList" name="medicationList" rows="4"></textarea><br>
+                    `;
+                case 'labTestResults':
+                    return `
+                        <label for="labTestResults">Lab Test Results:</label>
+                        <textarea id="labTestResults" name="labTestResults" rows="4"></textarea><br>
+                    `;
+                case 'imagingReports':
+                    return `
+                        <label for="imagingReports">Imaging Reports:</label>
+                        <textarea id="imagingReports" name="imagingReports" rows="4"></textarea><br>
+                    `;
+                case 'vitalSigns':
+                    return `
+                        <label for="vitalSigns">Vital Signs:</label>
+                        <textarea id="vitalSigns" name="vitalSigns" rows="4"></textarea><br>
+                    `;
+                case 'progressNotes':
+                    return `
+                        <label for="progressNotes">Progress Notes:</label>
+                        <textarea id="progressNotes" name="progressNotes" rows="4"></textarea><br>
+                    `;
+                case 'surgeriesProcedures':
+                    return `
+                        <label for="surgeriesProcedures">Surgeries and Procedures:</label>
+                        <textarea id="surgeriesProcedures" name="surgeriesProcedures" rows="4"></textarea><br>
+                    `;
+                case 'hospitalizationHistory':
+                    return `
+                        <label for="hospitalizationHistory">Hospitalization History:</label>
+                        <textarea id="hospitalizationHistory" name="hospitalizationHistory" rows="4"></textarea><br>
+                    `;
+                case 'referralInfo':
+                    return `
+                        <label for="referralInfo">Referral Information:</label>
+                        <textarea id="referralInfo" name="referralInfo" rows="4"></textarea><br>
+                    `;
+            }
+        }
+    
+        function savePatientDetails() {
+            var patient = {
+                name: document.getElementById('name').value,
+                dob: document.getElementById('dob').value,
+                age: document.getElementById('age').value,
+                data: []
+            };
+            patientDetails.push(patient);
+            clearPatientForm();
+        }
+    
+        function saveData(category) {
+            var formData = new FormData(document.getElementById('formContainer').querySelector('form'));
+            var patientIndex = patientDetails.length - 1;
+            var patientData = {};
+            for (var pair of formData.entries()) {
+                patientData[pair[0]] = pair[1];
+            }
+            patientDetails[patientIndex].data.push({ category: category, details: patientData });
+            displayPatientDetails();
+            clearForm();
+        }
+    
+        function displayPatientDetails() {
+            var patientDetailsBody = document.getElementById('patientDetailsBody');
+            patientDetailsBody.innerHTML = '';
+            patientDetails.forEach(function(patient) {
+                patient.data.forEach(function(item) {
+                    var newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${patient.name}</td>
+                        <td>${patient.age}</td>
+                        <td>${item.category}</td>
+                        <td>${formatPatientData(item.details)}</td>
+                    `;
+                    patientDetailsBody.appendChild(newRow);
+                });
+            });
+        }
+    
+        function formatPatientData(data) {
+            var formattedData = '';
+            for (var key in data) {
+                formattedData += '<strong>' + key + ':</strong> ' + data[key] + '<br>';
+            }
+            return formattedData;
+        }
+    
+        function clearForm() {
+            var formContainer = document.getElementById('formContainer');
+            formContainer.innerHTML = '';
+        }
+    
+        function clearPatientForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('dob').value = '';
+            document.getElementById('age').value = '';
+        }
+    
+        displayPatientDetails(); 
+    </script>
+</body>
+</html>
+  

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
+    <script src="https://smtpjs.com/v3/smtp.js">
+    </script>
+    <style>
+        
+        .form{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+        #email{
+            display: inline;
+        }
+        .btn{
+            padding: 0.5rem 0.8rem;
+            background-color: rgb(130, 164, 238);
+            outline: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 16px;
+        }
+        .otpverify{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form action="{{ url_for('signup') }}" method="post">
+    <div class="container">
+        <h1>Sign Up</h1><br>
+        <div class="name">
+            <i class="fa-solid fa-user"></i>
+            <span>Username <sub>*</sub></span><br>
+            <input type="text" name="username" required placeholder="Enter your name..">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Email</span><br>
+            <input type="email" name="email" placeholder="Enter Email...">
+            <i class="fa-solid fa-lock"></i>
+            <span>Password</span><br>
+            <input type="password" name="pass" placeholder="Enter Password...">
+            <br>
+            <div class="usertype">
+                <i class="fa-solid fa-key"></i>
+                <span>User Type</span>
+                <select name="user_type" title="User Type">
+                    <option value="Patient">Patient</option>
+                    <option value="Doctor">Doctor</option>
+                </select>
+            </div>
+            <br>
+            <input type="submit" class="signin" value="Sign Up">
+            <br>
+            <span>Already have an account?<a href="{{ url_for('login') }}">Log in</a></span>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+</form>
+    <script>
+ 
+
+        // Get the element with class name "container"
+        
+        
+        //Please Subscribe Ash_is_Coding.
+        
+        function sendOTP(){
+            const email = document.getElementById('email');
+            const otpverify = document.getElementsByClassName('otpverify')[0];
+            // const container = document.querySelector('.container');
+            
+            // // If the element exists, hide it
+            // Create a SMTP crendentials that I showed u in my previous video
+            
+            // Generating random number as OTP;(999999 - 100000 + 1)) + 100000
+            let otp_val = Math.floor(Math.random()*(999999 - 100000 +1) +10000);
+            
+            let emailbody = `
+            <h1>Please Subscribe to Ash_is_Coding</h1> <br>
+            <h2>Your OTP is </h2>${otp_val}
+            `;
+            console.log("clicked 1..");
+            
+            Email.send({
+                SecureToken : "c2972d4d-71eb-4653-be52-efd77d9ef233",
+                To : 'msnithin84@gmail.com',
+                From : "msnithin84@gmail.com",
+                Subject : "hi otp",
+                Body : emailbody
+            }).then(
+                //if success it returns "OK";
+                message => {
+                    if(message === "OK"){
+                        alert("OTP sent to your email "+email.value);
+                        
+                        // now making otp input visible
+                        otpverify.style.display = "block";
+                    const otp_inp = document.getElementById('otp_inp');
+                    const otp_btn = document.getElementById('otp-btn');
+                    const btn = document.getElementById('btn');
+        
+                    otp_btn.addEventListener('click',()=>{
+                        // now check whether sent email is valid
+                        if(otp_inp.value == otp_val){
+                            alert("Email address verified...");
+                            otpverify.style.display = "none";
+                            btn.style.display = "none";
+                            // window.location.assign('../templates/index.html');
+                        }
+                        else{
+                            alert("Invalid OTP");
+                        }
+                    })
+                }
+              }
+            );
+        
+        }
+function mongo(){
+    window.location.assign("{{ url_for( 'index' )  }}");
+            
+    // Connect to the database
+    const client = new MongoClient('mongodb://localhost:27017');
+    // Import the MongoDB driver
+    const MongoClient = require('mongodb');
+    const email = document.getElementById('email');
+    const pass = document.getElementById('password');
+    const name = document.getElementById('name');
+    
+
+
+    // Get the database and collection
+    const db = client.db('login');
+    const collection = db.collection('details');
+
+    // Insert a document
+    const document = {
+    name: name.value,
+    mailid: email.value,
+    password: pass.value,
+
+    };
+
+    collection.insertOne(document, function(err, result) {
+    if (err) throw err;
+    alert('signin was successfully ');
+    window.location.assign('../templates/index.html');
+    });
+
+    // Close the connection
+    client.close();
+}
+            </script>
+</body>
+</html>
